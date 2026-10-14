@@ -1,0 +1,372 @@
+# Final Data Visualization Portfolio Creation
+# December 2022
+# Written by: Raquel Rosenbloom
+#
+#Purpose
+#Create visualizations for final portfolio for Data Visualization course 
+#
+#Data sources
+#repo/input folder 
+#
+#--------------------------------------------------------------------------------------------------------------------------------------------------------
+#load libraries 
+#--------------------------------------------------------------------------------------------------------------------------------------------------------
+library(ggplot2)
+library(dplyr)
+library(readxl)
+library (tidyverse)
+library(fmsb)
+library(tibble)
+library(forcats)
+#--------------------------------------------------------------------------------------------------------------------------------------------------------
+#Visual 1 ELL Teacher/Student Ratios
+#--------------------------------------------------------------------------------------------------------------------------------------------------------
+#read in and view data 
+ELL_data_final <- read_excel("input/ELL_data_final.xlsx")
+View(ELL_data_final)
+
+#create visual comparing percentage of English language learner students to percentage of teachers 
+ggplot(data=ELL_data_final,
+       mapping = aes (x=PercentELL,
+                      y=PercentTeachers,
+                      color=ID))+
+  geom_point(shape=16)+
+  geom_text(aes(label=State, show.legend=F))+
+  scale_color_manual(name="ID",
+                     values= c("B" ="red",
+                               "G" ="forest green"),
+                     labels=c("B" ="Bad",
+                              "G" = "Good"))+
+  scale_x_continuous(limits=c(0,20))+
+  scale_y_continuous(limits=c(0,50))+
+  theme_minimal()+
+  labs(title=paste("Ratio of English Learner Teachers to English Language Learners (ELLs), by State, 2018-2019"),
+       caption = "Source: U.S. Department of Education, ED Data Express & National Center for Education Statistics",
+       x = "% of English Language Learners (ELLs) in State",
+       y="% of fully certified or licensed ELL teachers in State")
+#--------------------------------------------------------------------------------------------------------------------------------------------------------
+#Visual 2 MA ELL Proficiency Scores
+#--------------------------------------------------------------------------------------------------------------------------------------------------------
+#read in and view data 
+MA_Scores <- read_excel("input/MA_Scores.xlsx", 
+                        sheet = "Sheet2")
+View(MA_Scores)
+
+#create visual to depict exam results among ELL students in MA
+ggplot()+
+  geom_rect(aes(xmin="2015-2016",
+                xmax="2018-2019",
+                ymin=-Inf,
+                ymax=Inf),
+            fill="gray",
+            alpha=.2)+
+  geom_line(data=MA_Scores, mapping=aes(x=Year, y =PercentPass, group=Status, color=Status),
+            size=.8)+
+  geom_point(data=MA_Scores, mapping=aes(x=Year, y=PercentPass, group=Status, color=Status))+
+  theme_minimal()+
+  labs(y="Percent of ELL Students",
+       title = "English Language Proficiency Exam Results for English Learner Students in MA",
+                          "2012-2019",
+            caption = "Source: U.S. Department of Education | ED Data Express")
+#--------------------------------------------------------------------------------------------------------------------------------------------------------
+#Visual 3 MA ELL and Ranking Proportions
+#--------------------------------------------------------------------------------------------------------------------------------------------------------
+#read in and view data
+MA_high_schools <- read_excel("input/MA_high_schools.xlsx",
+                              sheet = "Sheet3")
+View(MA_high_schools)
+
+#create visual to depict high school rankings and ELL enrollment 
+ggplot(data=MA_high_schools,
+       aes(x=Rank, y=pct, fill=ID))+
+  geom_bar(stat="identity")+
+  theme(plot.margin=unit(c(1,1,1,1), "cm"))+
+  geom_text(aes(label=pct),
+            position=position_stack(vjust=.5))+
+  labs(title="Proportion of English Learner Students in Highest and Lowest Ranking Schools, and Statewide",
+       subtitle="The highest ranked schools tend to have the fewest ELL students",
+       caption="Source: Massachusetts Department of Elementary and Secondary Education")+
+  theme(axis.title.x=element_blank(),
+        axis.title.y=element_blank(),
+        axis.ticks.x=element_blank(),
+        axis.ticks.y=element_blank(),
+        axis.text.y=element_blank(),
+        panel.background=element_blank())
+#--------------------------------------------------------------------------------------------------------------------------------------------------------
+#Visual 4 MA ELL students and Graduation Rates
+#--------------------------------------------------------------------------------------------------------------------------------------------------------
+#create visual showing ELL graduation rates 
+ggplot(data=MA_high_schools, aes(x=Allgradrate, y=ELgradrate, size=number))+
+  geom_point(mapping=aes(fill=factor(Top)), shape=21, alpha=.8)+
+  scale_fill_manual(values=c("0"="steel blue",
+                             "1"="forest green"),
+                    labels= c("0"="Low Ranking",
+                              "1"= "High Ranking"))+
+  geom_text(aes(label=School), show.legend=F, size=4)+
+  scale_size_continuous(range=c(2,12))+
+  scale_y_continuous(breaks=c(20, 40, 60, 80, 100))+
+  labs(title="Massachusetts ELL High School Graduation Rates by School Ranking",
+       subtitle="ELL students tend to graduate at the same rates as their non-ELL peers.",
+       caption="Source: Massachusetts Department of Elementary and Secondary Education",
+       x="All Student Graduation Rate",
+       y="ELL Student Graduation Rate"
+       )+
+  theme(strip.background=element_blank(),
+        panel.background=element_blank())
+#--------------------------------------------------------------------------------------------------------------------------------------------------------
+#Visual 5 Race #--------------------------------------------------------------------------------------------------------------------------------------------------------
+#read in and view data 
+dataviz2 <- read_excel("input/visual5.xlsx", 
+                       sheet = "Sheet3")
+View(dataviz2)
+
+#create factor levels to sort data 
+my_factor_levels <- c("indnative", "raceother", "asian", "black", "white")
+
+#sort data by factor level
+dataviz2$statnew <- factor(dataviz2$stat,
+                           levels=my_factor_levels)
+
+#create visual depicting racial makeup of states compared by resettlement model            
+ggplot(data=dataviz2,
+       aes(x=wf, y=pct, fill=statnew))+
+  geom_bar(stat="identity")+
+  theme(plot.margin=unit(c(1, 1, 1, 1), "cm"))+
+  geom_text(aes(label=pct),
+            position = position_stack(vjust=.5),
+            size=3)+
+  coord_flip()+
+  scale_fill_manual(values = c("#B8E186",
+                               "#E6F5D0",
+                               "#F1B6DA",
+                               "#DE77AE",
+                               "Steel blue"))+
+  theme(axis.title.x = element_blank(),
+        axis.title.y=element_blank(),
+        axis.ticks.x=element_blank(),
+        axis.ticks.y=element_blank(),
+        axis.text.x=element_blank(),
+        panel.background=element_blank())
+#--------------------------------------------------------------------------------------------------------------------------------------------------------
+#Visual 6 San Diego WF and CA Traditional Comparison
+#--------------------------------------------------------------------------------------------------------------------------------------------------------
+#read in and view data 
+datavizdemoNEW <- read_excel("input/visual6", 
+                             sheet = "Sheet5")
+View(datavizdemoNEW)
+
+#create data frame 
+sandiegoca.df <- as.data.frame(datavizdemoNEW)
+View(sandiegoca.df)
+
+rownames(sandiegoca.df) <- sandiegoca.df[,1]
+
+sandiegoca.df$...1 <- NULL
+sandiegoca.df$State <- NULL
+
+View(sandiegoca.df)
+
+sandiegoca.df <- rbind(rep(100,4), rep(5,4), sandiegoca.df)
+View(sandiegoca.df)
+
+line_colors <- c("#377eb8", "#FFA51C")
+
+radarchart(sandiegoca.df,
+           na.itp = FALSE,
+           pcol = line_colors,
+           plwd = 3,
+           plty = 1,
+           axistype = 1,
+           caxislabels = c("20%", "40%", "60%", "80%", "100%"),
+           axislabcol="darkgrey",
+           cglcol="grey",
+           cglty=1)
+
+legend(x=1.3, y=1,
+       legend = rownames(sandiegoca.df),
+       bty="n",
+       pch=20,
+       col= line_colors)
+#--------------------------------------------------------------------------------------------------------------------------------------------------------
+#Visual 7a Shifting State Resettlement Types 
+#--------------------------------------------------------------------------------------------------------------------------------------------------------
+URWFEO1996_2019update <- read_excel("input/URWFEO1996-2019update.xls")
+View(URWFEO1996_2019update)                                                                            
+
+WFagain <- read_excel("input/WFagain.xls")
+View(WFagain)
+
+wf2005_2019 <- filter(WFagain, year>2004)
+View(wf2005_2019)
+
+wfyears2005_2019$state.fac <- as.factor(wfyears2005_2019$state)
+wfyears2005_2019$state.fac <- fct_rev(wfyears2005_2019$state.fac)
+
+wf2005_2019 <- wf2005_2019 %>% 
+  mutate(newwf=if_else(wf==0,"no","yes"))
+
+wf2005_2019$state.fac <- as.factor(wf2005_2019$state)
+wf2005_2019$state.fac <- fct_rev(wf2005_2019$state.fac)
+
+ggplot(data=wf2005_2019,
+       mapping=aes(x=year,
+                   y=state.fac))+
+  geom_tile(aes(fill=newwf),
+            alpha=.5)+
+  scale_fill_manual(values=c(no ="#377EB8",
+                             yes ="#FFA51C"),
+                    labels=c("no"="Traditional Model",
+                             "yes"="Wilson/Fish Model"))+
+  theme(axis.title.x=element_blank(),
+        axis.title.y=element_blank(),
+        axis.ticks.y=element_blank(),
+        panel.background=element_blank())+
+  labs(title = "In the past 15 years, only two states have opted to move to Wilson/Fish resettlement models",
+       subtitle = "Most states operating with Wilson/Fish have been doing so for decades.",
+       caption = "Source: Office of Refugee Resettlement Annual Reports to Congress 2005-2019")
+#--------------------------------------------------------------------------------------------------------------------------------------------------------
+#Visual 7b Tennessee Job Retentions
+#--------------------------------------------------------------------------------------------------------------------------------------------------------
+#visual depicts immigrant job retention percentage in tennessee before and after Wilson/Fish implementation
+URWFEO1996_2019update <- read_excel("input/datavisthesisdata.xls")
+
+tennessee <- datavizthesisdata %>% 
+  filter(state="Tennessee")
+
+ggplot(data=tennessee,
+       mapping=aes(x = perjobretention*100)) +
+  geom_density(mapping=aes(fill = as.character(newwf),
+                           color=as.character(newwf)), 
+               alpha=0.3)+
+  scale_fill_manual(values = c("no"="steel blue",
+                               "yes"="orange"),
+                    labels = c("no"= "Traditional Model (2005-2009)",
+                               "yes" = "Wilson/Fish (2010-2018)"))+
+  scale_color_manual(values = c("no"="steel blue",
+                                "yes"="orange"),
+                     labels = c("no"= "Traditional Model (2005-2009)",
+                                "yes" = "Wilson/Fish (2010-2018)"))+
+  labs(title = paste("The percentage of refugees retaining their jobs increased when Tennessee shifted to the Wilson/Fish model after 2010."),
+       caption = "Data: Office of Refugee Resettlement (ORR) Annual Reports to Congress",
+       x = "Percent of Refugees Retaining their Jobs After 90 Days")+
+  theme(legend.title = element_blank())+
+  theme_minimal()
+
+#visual depicts immigrant cash terminations percentage in tennessee before and after Wilson/Fish implementation
+ggplot(data=tennessee,
+       mapping=aes(x = percashterm*100)) +
+  geom_density(mapping=aes(fill = as.character(newwf),
+                           color=as.character(newwf)), 
+               alpha=0.3)+
+  scale_fill_manual(values = c("no"="steel blue",
+                               "yes"="orange"),
+                    labels = c("no"= "Traditional Model (2005-2009)",
+                               "yes" = "Wilson/Fish (2010-2018)"))+
+  scale_color_manual(values = c("no"="steel blue",
+                                "yes"="orange"),
+                     labels = c("no"= "Traditional Model (2005-2009)",
+                                "yes" = "Wilson/Fish (2010-2018)"))+
+  labs(title = paste("The percentage of refugees retaining their jobs increased when Tennessee shifted to the Wilson/Fish model after 2010."),
+       caption = "Data: Office of Refugee Resettlement (ORR) Annual Reports to Congress",
+       x = "Percent of Refugees Retaining their Jobs After 90 Days")+
+  theme(legend.title = element_blank())+
+  theme_minimal()
+
+#visual depicts percentage of immigrant jobs that offered health benefits in tennessee before and after Wilson/Fish implementation
+ggplot(data=tennessee,
+       mapping=aes(x = perhealth*100)) +
+  geom_density(mapping=aes(fill = as.character(newwf),
+                           color=as.character(newwf)), 
+               alpha=0.3)+
+  scale_fill_manual(values = c("no"="steel blue",
+                               "yes"="orange"),
+                    labels = c("no"= "Traditional Model (2005-2009)",
+                               "yes" = "Wilson/Fish (2010-2018)"))+
+  scale_color_manual(values = c("no"="steel blue",
+                                "yes"="orange"),
+                     labels = c("no"= "Traditional Model (2005-2009)",
+                                "yes" = "Wilson/Fish (2010-2018)"))+
+  labs(title = paste("The percentage of refugees retaining their jobs increased when Tennessee shifted to the Wilson/Fish model after 2010."),
+       caption = "Data: Office of Refugee Resettlement (ORR) Annual Reports to Congress",
+       x = "Percent of Refugees Retaining their Jobs After 90 Days")+
+  theme(legend.title = element_blank())+
+  theme_minimal()
+
+#visual depicts immigrant employment rate in tennessee before and after Wilson/Fish implementation
+ggplot(data=tennessee,
+       mapping=aes(x = peremployed*100)) +
+  geom_density(mapping=aes(fill = as.character(newwf),
+                           color=as.character(newwf)), 
+               alpha=0.3)+
+  scale_fill_manual(values = c("no"="steel blue",
+                               "yes"="orange"),
+                    labels = c("no"= "Traditional Model (2005-2009)",
+                               "yes" = "Wilson/Fish (2010-2018)"))+
+  scale_color_manual(values = c("no"="steel blue",
+                                "yes"="orange"),
+                     labels = c("no"= "Traditional Model (2005-2009)",
+                                "yes" = "Wilson/Fish (2010-2018)"))+
+  labs(title = paste("The percentage of refugees retaining their jobs increased when Tennessee shifted to the Wilson/Fish model after 2010."),
+       caption = "Data: Office of Refugee Resettlement (ORR) Annual Reports to Congress",
+       x = "Percent of Refugees Retaining their Jobs After 90 Days")+
+  theme(legend.title = element_blank())+
+  theme_minimal()
+#--------------------------------------------------------------------------------------------------------------------------------------------------------
+#Visual 8 Comparative Employment Rates, all states, refugee resettlement model type
+#--------------------------------------------------------------------------------------------------------------------------------------------------------
+datavizwfall <- read_excel("input/datavizwfall.xls", 
+                             sheet = "Sheet1")
+ggplot()+
+  geom_line(data=datavizwfall,
+            aes(x=year,
+                y=((avgperemployed)*100),
+                group=newwf,
+                color=newwf))+
+  scale_color_manual(values = c("no"="steel blue",
+                                "yes"="orange"),
+                     labels = c("no" = "Traditional Model States",
+                                "yes" = "Wilson/Fish Model States"))+
+  geom_line(data=datavizwfall,
+            aes(x=year,
+                y=(100-avgur),
+                group=newwf,
+                color=newwf))+
+  scale_y_continuous(limits=c(0,100))+
+  theme_minimal() +
+  labs(title = "Comparative state and refugee employment rates in Wilson/Fish Model States and Traditional Model States",
+       subtitle = "There is little difference between state employment rates but there is difference in refugee employment rates based on model type",
+       caption = "Source: Office of Refugee Resettlement Annual Reports to Congress 2005-2018",
+       x=element_blank(),
+       y="Average Percent Employed")
+       
+#--------------------------------------------------------------------------------------------------------------------------------------------------------
+#Visual 9 Refugee Job Seekers Caseloads
+#--------------------------------------------------------------------------------------------------------------------------------------------------------
+datavizthesisdata <- datavizthesisdata %>% 
+  mutate(newwf=if_else(wf==0,"no","yes"))
+
+datavizthesisdata <- datavizthesisdata %>% replace(is.na(.), 0)
+
+datavizthesisdatastates <- datavizthesisdata %>%
+  group_by(newwf, year) %>% summarize(caseloadnew=sum(caseload))
+
+datavizthesisdatastates$newwf.fac <- as.factor(datavizthesisdatastates$newwf)
+datavizthesisdatastates$newwf.fac <- fct_rev(datavizthesisdatastates$newwf)
+
+ggplot(data=datavizthesisdatastates,
+       aes(x=year, y=caseloadnew, fill=newwf.fac))+
+  geom_bar(stat="identity", alpha=.8)+
+  geom_text(aes(label=caseloadnew))+
+  scale_fill_manual(values = c("no"="steel blue",
+                               "yes"="orange"),
+                    labels = c("no"= "Traditional Model",
+                               "yes" = "Wilson/Fish"))+
+  scale_color_manual(values = c("no"="steel blue",
+                                "yes"="orange"),
+                     labels = c("no"= "Traditional Model",
+                                "yes" = "Wilson/Fish"))+
+  labs(title = paste("Non Wilson/Fish States Resettle the Majority of Refugees"),
+       caption = "Data: Office of Refugee Resettlement (ORR) Annual Reports to Congress",
+       x = "Year",
+       y = "Caseload")+
+  theme_minimal()
