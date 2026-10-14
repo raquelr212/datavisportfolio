@@ -14,8 +14,8 @@ Data can be found in the /input folder.
 Code can be found in the /code folder.
 The visualizations can be found in the /output folder. The output can saved as pdfs from the outputs the file in the /code file runs. 
 
-**Part I: English Language learners 
-**
+***Part I: English Language learners 
+***
 
 Visualization 1: Ratio of English Language Teachers Learners to English Language Learners, by State, 2018-2019
 
@@ -34,8 +34,8 @@ Visualization 4: Massachusetts Average High School Graduation Rates by School Ra
 
 The Massachusetts Department of Elementary and Secondary Education publishes data collected on elementary and secondary schools (K-12) in the state on their website. The data for Visualization 4 further explore disparities in low and high ranking high schools, focusing on graduation rates, and comes from enrollment and attendance and performance indicator data for high schools in the state of Massachusetts for the 2021 school year. High school rankings were researched from the U.S. News & World Report and data was collected on a sample of the top 15 and bottom 15 ranked schools in the state. Ranking is determined by scores on college readiness, curriculum, state assessment proficiency, state assessment performance, and graduation rates. Overall, the visual suggests ELLs graduate at similar rates to their non-ELL peers. High ranking schools have similar graduation rates (near 100%), whereas low ranking schools have variation in their graduation rates. Only 5 out of the top 15 ranked schools in the state had greater than 0% ELLs in the student body in 2021. The five high schools are grouped in the top right corner, with graduation rates of nearly 100% for both ELL and all students. Among the low ranked schools, the percentage of ELLs in the student body does not seem to impact graduation rates, as Springfield and Boston Arts are both in the bottom 30 in terms of rankings, have a student body of around 10% ELLs, but have vastly different graduation rates with Springfield near 20% and Boston Arts above 80%. This variation suggests there are likely other unexplored factors, besides the % of ELLs in the student body among high schools that are low ranking that impact graduation rates.
 
-**Part II: Refugee Resettlement Models 
-**
+***Part II: Refugee Resettlement Models 
+***
 
 For visuals 5-9, I use data from my graduate thesis project, which evaluates the efficacy of refugee resettlement models by comparing employment outcomes at the state level in the United States from 2005-2019. Data are collected from the Department of Health and Human Services Office of Refugee Resettlement (ORR) annual reports to congress, in which they report on indicators from the Annual Survey of Refugees. For the full dataset, I also compiled data from various other sources, including demographic data from the United States Census Bureau’s American Community Survey, transportation data from the Bureau of Transportation Statistics, unemployment rates from the Bureau of Labor Statistics, and welfare spending data from the Urban Brookings Tax Policy Institute. 
 
